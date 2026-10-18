@@ -12,10 +12,10 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Configurar JDK 21 / GraalVM
+      - name: Configurar JDK 25 / GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
-          java-version: '21'
+          java-version: '25'
           distribution: 'mandrel'
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
