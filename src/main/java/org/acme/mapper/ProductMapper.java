@@ -17,12 +17,13 @@ public class ProductMapper {
         model.name = dto.name();
         model.barcode = dto.barcode();
         model.description = dto.description();
+        model.unitOfMeasure = dto.unitOfMeasure();
         if (dto.createdAt() != null) {
             model.createdAt = dto.createdAt();
         }
     }
 
     public ProductDTO toDTO(ProductModel model) {
-        return new ProductDTO(model.id, model.name, model.barcode, model.description, model.createdAt);
+        return new ProductDTO(model.id, model.name, model.barcode, model.description,model.unitOfMeasure, model.createdAt);
     }
 }
