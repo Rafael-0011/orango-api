@@ -15,7 +15,6 @@ public class InventoryTransactionMapper {
     }
 
     public void updateModel(InventoryTransactionDTO dto, InventoryTransactionModel model) {
-        model.product = dto.productId() == null ? null : ProductModel.findById(dto.productId());
         model.transactionType = dto.transactionType();
         model.quantity = dto.quantity();
         model.unitValue = dto.unitValue();
@@ -32,6 +31,7 @@ public class InventoryTransactionMapper {
                 model.transactionType,
                 model.quantity,
                 model.unitValue,
+                model.cmv,
                 model.transactionDate,
                 model.notes);
     }

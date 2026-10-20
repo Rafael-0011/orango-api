@@ -1,11 +1,15 @@
 package org.acme.service;
 
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.panache.common.Page;
+import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import org.acme.dto.InventoryDTO;
+import org.acme.dto.PageResponse;
 import org.acme.mapper.InventoryMapper;
 import org.acme.model.InventoryModel;
 
@@ -20,6 +24,18 @@ public class InventoryService implements CrudService<InventoryDTO> {
         return InventoryModel.<InventoryModel>findAll().list().stream()
                 .map(mapper::toDTO)
                 .toList();
+    }
+
+    public PageResponse<InventoryDTO> findAllPage(int page, int size) {
+        PanacheQuery<InventoryModel> query =  InventoryModel
+                .findAll(Sort.descending("transactionDate"))
+                .page(Page.of(page, size));
+
+        List<InventoryDTO> content = query.list().stream()
+                .map(mapper::toDTO)
+                .toList();
+
+        return new PageResponse<>(content, page, size, query.count(), query.pageCount());
     }
 
     @Override

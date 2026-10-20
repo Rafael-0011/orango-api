@@ -32,4 +32,5 @@ public class InventoryModel extends PanacheEntityBase {
 
     @Column(name = "updated_at")
     public LocalDateTime updatedAt;
+
 }

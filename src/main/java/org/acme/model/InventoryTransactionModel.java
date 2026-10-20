@@ -1,14 +1,8 @@
 package org.acme.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -24,14 +18,18 @@ public class InventoryTransactionModel extends PanacheEntityBase {
     @JoinColumn(name = "product_id")
     public ProductModel product;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "transaction_type", length = 10)
-    public String transactionType;
+    public TransactionTypeEnum transactionType;
 
     @Column(nullable = false, precision = 12, scale = 4)
     public BigDecimal quantity;
 
     @Column(name = "unit_value", nullable = false, precision = 10, scale = 2)
     public BigDecimal unitValue;
+
+    @Column(name = "cmv", nullable = false, precision = 12, scale = 2)
+    public BigDecimal cmv = BigDecimal.ZERO;
 
     @Column(name = "transaction_date")
     public LocalDateTime transactionDate;

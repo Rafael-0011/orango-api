@@ -1,18 +1,15 @@
 package org.acme.resource;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.validation.constraints.Max;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
+
+import org.acme.dto.InventoryDTO;
 import org.acme.dto.InventoryTransactionDTO;
+import org.acme.dto.PageResponse;
 import org.acme.service.InventoryTransactionService;
 
 @Path("/inventory-transactions")
@@ -35,9 +32,23 @@ public class InventoryTransactionResource {
         return dto == null ? Response.status(Response.Status.NOT_FOUND).build() : Response.ok(dto).build();
     }
 
+    @GET
+    @Path("/find-all-page")
+    public PageResponse<InventoryTransactionDTO> findAllPage(
+            @QueryParam("page") @DefaultValue("0") int page,
+            @QueryParam("size") @DefaultValue("20") @Max(100) int size) {
+        return service.findAllPage(page, size);
+    }
+
     @POST
-    public Response create(InventoryTransactionDTO dto) {
-        return Response.status(Response.Status.CREATED).entity(service.create(dto)).build();
+    @Path("/inflow")
+    public Response createInFlow(InventoryTransactionDTO dto) {
+        return Response.status(Response.Status.CREATED).entity(service.createInFlow(dto)).build();
+    }
+    @POST
+    @Path("/outflow")
+    public Response createOutFlow(InventoryTransactionDTO dto) {
+        return Response.status(Response.Status.CREATED).entity(service.createOutFlow(dto)).build();
     }
 
     @PUT
