@@ -14,19 +14,15 @@ import java.util.List;
 import java.util.Optional;
 
 import jakarta.ws.rs.BadRequestException;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.WebApplicationException;
-import org.acme.dto.InventoryDTO;
-import org.acme.dto.InventoryTransactionDTO;
+import org.acme.dto.req.InventoryTransactionReqDTO;
 import org.acme.dto.PageResponse;
+import org.acme.dto.res.InventoryTransactionResDTO;
 import org.acme.mapper.InventoryTransactionMapper;
-import org.acme.model.InventoryModel;
-import org.acme.model.InventoryTransactionModel;
-import org.acme.model.ProductModel;
-import org.acme.model.TransactionTypeEnum;
+import org.acme.model.*;
 
 @ApplicationScoped
-public class InventoryTransactionService implements CrudService<InventoryTransactionDTO> {
+public class InventoryTransactionService implements CrudService<InventoryTransactionReqDTO, InventoryTransactionResDTO> {
 
     @Inject
     InventoryTransactionMapper mapper;
@@ -35,26 +31,26 @@ public class InventoryTransactionService implements CrudService<InventoryTransac
     private static final RoundingMode ROUNDING = RoundingMode.HALF_UP;
 
     @Override
-    public List<InventoryTransactionDTO> findAll() {
+    public List<InventoryTransactionResDTO> findAll() {
         return InventoryTransactionModel.<InventoryTransactionModel>findAll().list().stream()
                 .map(mapper::toDTO)
                 .toList();
     }
 
     @Override
-    public InventoryTransactionDTO findById(Long id) {
+    public InventoryTransactionResDTO findById(Long id) {
         return Optional.ofNullable(InventoryTransactionModel.findById(id))
                 .map(InventoryTransactionModel.class::cast)
                 .map(mapper::toDTO)
                 .orElse(null);
     }
 
-    public PageResponse<InventoryTransactionDTO> findAllPage(int page, int size) {
+    public PageResponse<InventoryTransactionResDTO> findAllPage(int page, int size) {
         PanacheQuery<InventoryTransactionModel> query =  InventoryTransactionModel
                 .findAll(Sort.descending("transactionDate"))
                 .page(Page.of(page, size));
 
-        List<InventoryTransactionDTO> content = query.list().stream()
+        List<InventoryTransactionResDTO> content = query.list().stream()
                 .map(mapper::toDTO)
                 .toList();
 
@@ -62,12 +58,12 @@ public class InventoryTransactionService implements CrudService<InventoryTransac
     }
 
     @Override
-    public InventoryTransactionDTO create(InventoryTransactionDTO dto) {
+    public InventoryTransactionResDTO create(InventoryTransactionReqDTO dto) {
         return null;
     }
 
     @Transactional
-    public InventoryTransactionDTO createInFlow(InventoryTransactionDTO dto) {
+    public InventoryTransactionResDTO createInFlow(InventoryTransactionReqDTO dto) {
         ProductModel product = ProductModel.findProduct(dto.productId());
         validateUnitOfMeasure(product, dto.quantity());
         InventoryModel inventory = ProductModel.findOrCreateInventoryLocked(product);
@@ -89,12 +85,14 @@ public class InventoryTransactionService implements CrudService<InventoryTransac
         inventory.currentAverageCost = newAvgCost;
         inventory.updatedAt = LocalDateTime.now();
 
+        statusAttention(inventory);
+
         return mapper.toDTO(model);
     }
 
 
     @Transactional
-    public InventoryTransactionDTO createOutFlow(InventoryTransactionDTO dto) {
+    public InventoryTransactionResDTO createOutFlow(InventoryTransactionReqDTO dto) {
         ProductModel product = ProductModel.findProduct(dto.productId());
         validateUnitOfMeasure(product, dto.quantity());
         InventoryModel inventory = ProductModel.findOrCreateInventoryLocked(product);
@@ -103,7 +101,6 @@ public class InventoryTransactionService implements CrudService<InventoryTransac
             throw new WebApplicationException(
                     "Estoque insuficiente. Disponível: " + inventory.currentQuantity, 422);
         }
-
         InventoryTransactionModel model = mapper.toModel(dto);
         model.product = product;
         model.transactionType = TransactionTypeEnum.OUTFLOW;
@@ -117,12 +114,14 @@ public class InventoryTransactionService implements CrudService<InventoryTransac
         inventory.currentQuantity = inventory.currentQuantity.subtract(dto.quantity());
         inventory.updatedAt = LocalDateTime.now();
 
+        statusAttention(inventory);
+
         return mapper.toDTO(model);
     }
 
     @Override
     @Transactional
-    public InventoryTransactionDTO update(Long id, InventoryTransactionDTO dto) {
+    public InventoryTransactionResDTO update(Long id, InventoryTransactionReqDTO dto) {
         InventoryTransactionModel model = InventoryTransactionModel.findById(id);
         if (model == null) {
             return null;
@@ -157,6 +156,15 @@ public class InventoryTransactionService implements CrudService<InventoryTransac
                 && quantity.stripTrailingZeros().scale() > 0) {
             throw new BadRequestException(
                     "Produto em " + product.unitOfMeasure + " só aceita quantidade inteira");
+        }
+    }
+
+    private void statusAttention(InventoryModel inventory) {
+        if (inventory.inventoryMinimum.compareTo(inventory.currentQuantity) >= 0){
+            inventory.status = StatusInventory.CRITICAL;
+        }
+        else {
+            inventory.status = StatusInventory.NORMAL;
         }
     }
 }
