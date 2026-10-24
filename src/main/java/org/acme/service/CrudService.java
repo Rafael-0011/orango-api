@@ -2,15 +2,15 @@ package org.acme.service;
 
 import java.util.List;
 
-public interface CrudService<D> {
+public interface CrudService<R, S> {
 
-    List<D> findAll();
+    List<S> findAll();
 
-    D findById(Long id);
+    S findById(Long id);
 
-    D create(D dto);
+    S create(R dto);
 
-    D update(Long id, D dto);
+    S update(Long id, R dto);
 
     boolean delete(Long id);
 }

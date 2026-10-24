@@ -12,7 +12,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
-import org.acme.dto.ProductDTO;
+import org.acme.dto.req.ProductReqDTO;
 import org.acme.service.ProductService;
 
 @Path("/products")
@@ -24,27 +24,25 @@ public class ProductResource {
     ProductService service;
 
     @GET
-    public List<ProductDTO> findAll() {
-        return service.findAll();
+    public Response findAll() {
+        return Response.ok(service.findAll()).build();
     }
 
     @GET
     @Path("/{id}")
     public Response findById(@PathParam("id") Long id) {
-        ProductDTO dto = service.findById(id);
-        return dto == null ? Response.status(Response.Status.NOT_FOUND).build() : Response.ok(dto).build();
+        return Response.ok(service.findById(id)).build();
     }
 
     @POST
-    public Response create(ProductDTO dto) {
+    public Response create(ProductReqDTO dto) {
         return Response.status(Response.Status.CREATED).entity(service.create(dto)).build();
     }
 
     @PUT
     @Path("/{id}")
-    public Response update(@PathParam("id") Long id, ProductDTO dto) {
-        ProductDTO updated = service.update(id, dto);
-        return updated == null ? Response.status(Response.Status.NOT_FOUND).build() : Response.ok(updated).build();
+    public Response update(@PathParam("id") Long id, ProductReqDTO dto) {
+        return Response.ok(service.update(id, dto)).build();
     }
 
     @DELETE

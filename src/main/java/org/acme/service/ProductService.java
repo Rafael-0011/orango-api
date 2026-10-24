@@ -5,25 +5,26 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-import org.acme.dto.ProductDTO;
+import org.acme.dto.req.ProductReqDTO;
+import org.acme.dto.res.ProductResDTO;
 import org.acme.mapper.ProductMapper;
 import org.acme.model.ProductModel;
 
 @ApplicationScoped
-public class ProductService implements CrudService<ProductDTO> {
+public class ProductService implements CrudService<ProductReqDTO, ProductResDTO> {
 
     @Inject
     ProductMapper mapper;
 
     @Override
-    public List<ProductDTO> findAll() {
+    public List<ProductResDTO> findAll() {
         return ProductModel.<ProductModel>findAll().list().stream()
                 .map(mapper::toDTO)
                 .toList();
     }
 
     @Override
-    public ProductDTO findById(Long id) {
+    public ProductResDTO findById(Long id) {
         return Optional.ofNullable(ProductModel.findById(id))
                 .map(ProductModel.class::cast)
                 .map(mapper::toDTO)
@@ -32,7 +33,7 @@ public class ProductService implements CrudService<ProductDTO> {
 
     @Override
     @Transactional
-    public ProductDTO create(ProductDTO dto) {
+    public ProductResDTO create(ProductReqDTO dto) {
         ProductModel model = mapper.toModel(dto);
         model.persist();
         return mapper.toDTO(model);
@@ -40,7 +41,7 @@ public class ProductService implements CrudService<ProductDTO> {
 
     @Override
     @Transactional
-    public ProductDTO update(Long id, ProductDTO dto) {
+    public ProductResDTO update(Long id, ProductReqDTO dto) {
         ProductModel model = ProductModel.findById(id);
         if (model == null) {
             return null;

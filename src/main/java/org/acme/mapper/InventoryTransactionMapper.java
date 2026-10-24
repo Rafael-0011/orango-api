@@ -1,31 +1,30 @@
 package org.acme.mapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import org.acme.dto.InventoryTransactionDTO;
+import org.acme.dto.req.InventoryTransactionReqDTO;
+import org.acme.dto.res.InventoryTransactionResDTO;
 import org.acme.model.InventoryTransactionModel;
-import org.acme.model.ProductModel;
+
+import java.time.LocalDateTime;
 
 @ApplicationScoped
 public class InventoryTransactionMapper {
 
-    public InventoryTransactionModel toModel(InventoryTransactionDTO dto) {
+    public InventoryTransactionModel toModel(InventoryTransactionReqDTO dto) {
         InventoryTransactionModel model = new InventoryTransactionModel();
         updateModel(dto, model);
         return model;
     }
 
-    public void updateModel(InventoryTransactionDTO dto, InventoryTransactionModel model) {
-        model.transactionType = dto.transactionType();
+    public void updateModel(InventoryTransactionReqDTO dto, InventoryTransactionModel model) {
         model.quantity = dto.quantity();
         model.unitValue = dto.unitValue();
-        if (dto.transactionDate() != null) {
-            model.transactionDate = dto.transactionDate();
-        }
+        model.transactionDate = LocalDateTime.now();
         model.notes = dto.notes();
     }
 
-    public InventoryTransactionDTO toDTO(InventoryTransactionModel model) {
-        return new InventoryTransactionDTO(
+    public InventoryTransactionResDTO toDTO(InventoryTransactionModel model) {
+        return new InventoryTransactionResDTO(
                 model.id,
                 model.product == null ? null : model.product.id,
                 model.transactionType,
