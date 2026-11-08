@@ -1,15 +1,14 @@
-package org.acme.dto;
+package org.acme.dto.res;
 
 import org.acme.model.UnitOfMeasureEnum;
 
 import java.time.LocalDateTime;
 
-public record ProductDTO(
+public record ProductResDTO(
         Long id,
         String name,
         String barcode,
         String description,
-        UnitOfMeasureEnum unitOfMeasure,
-        LocalDateTime createdAt
+        UnitOfMeasureEnum unitOfMeasure
 ) {
 }

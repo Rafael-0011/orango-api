@@ -7,9 +7,9 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
 
-import org.acme.dto.InventoryDTO;
-import org.acme.dto.InventoryTransactionDTO;
+import org.acme.dto.req.InventoryTransactionReqDTO;
 import org.acme.dto.PageResponse;
+import org.acme.dto.res.InventoryTransactionResDTO;
 import org.acme.service.InventoryTransactionService;
 
 @Path("/inventory-transactions")
@@ -21,20 +21,19 @@ public class InventoryTransactionResource {
     InventoryTransactionService service;
 
     @GET
-    public List<InventoryTransactionDTO> findAll() {
-        return service.findAll();
+    public Response findAll() {
+        return Response.ok(service.findAll()).build();
     }
 
     @GET
     @Path("/{id}")
     public Response findById(@PathParam("id") Long id) {
-        InventoryTransactionDTO dto = service.findById(id);
-        return dto == null ? Response.status(Response.Status.NOT_FOUND).build() : Response.ok(dto).build();
+        return Response.ok(service.findById(id)).build();
     }
 
     @GET
     @Path("/find-all-page")
-    public PageResponse<InventoryTransactionDTO> findAllPage(
+    public PageResponse<InventoryTransactionResDTO> findAllPage(
             @QueryParam("page") @DefaultValue("0") int page,
             @QueryParam("size") @DefaultValue("20") @Max(100) int size) {
         return service.findAllPage(page, size);
@@ -42,20 +41,19 @@ public class InventoryTransactionResource {
 
     @POST
     @Path("/inflow")
-    public Response createInFlow(InventoryTransactionDTO dto) {
+    public Response createInFlow(InventoryTransactionReqDTO dto) {
         return Response.status(Response.Status.CREATED).entity(service.createInFlow(dto)).build();
     }
     @POST
     @Path("/outflow")
-    public Response createOutFlow(InventoryTransactionDTO dto) {
+    public Response createOutFlow(InventoryTransactionReqDTO dto) {
         return Response.status(Response.Status.CREATED).entity(service.createOutFlow(dto)).build();
     }
 
     @PUT
     @Path("/{id}")
-    public Response update(@PathParam("id") Long id, InventoryTransactionDTO dto) {
-        InventoryTransactionDTO updated = service.update(id, dto);
-        return updated == null ? Response.status(Response.Status.NOT_FOUND).build() : Response.ok(updated).build();
+    public Response update(@PathParam("id") Long id, InventoryTransactionReqDTO dto) {
+        return Response.ok(service.update(id, dto)).build();
     }
 
     @DELETE

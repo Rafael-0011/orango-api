@@ -6,8 +6,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
-import org.acme.dto.InventoryDTO;
+import org.acme.dto.req.InventoryReqDTO;
 import org.acme.dto.PageResponse;
+import org.acme.dto.res.InventoryResDTO;
 import org.acme.service.InventoryService;
 
 @Path("/inventory")
@@ -19,13 +20,13 @@ public class InventoryResource {
     InventoryService service;
 
     @GET
-    public List<InventoryDTO> findAll() {
+    public List<InventoryResDTO> findAll() {
         return service.findAll();
     }
 
     @GET
     @Path("/find-all-page")
-    public PageResponse<InventoryDTO> findAllPage(
+    public PageResponse<InventoryResDTO> findAllPage(
             @QueryParam("page") @DefaultValue("0") int page,
             @QueryParam("size") @DefaultValue("20") @Max(100) int size) {
         return service.findAllPage(page, size);
@@ -34,20 +35,19 @@ public class InventoryResource {
     @GET
     @Path("/{id}")
     public Response findById(@PathParam("id") Long id) {
-        InventoryDTO dto = service.findById(id);
+        InventoryResDTO dto = service.findById(id);
         return dto == null ? Response.status(Response.Status.NOT_FOUND).build() : Response.ok(dto).build();
     }
 
     @POST
-    public Response create(InventoryDTO dto) {
+    public Response create(InventoryReqDTO dto) {
         return Response.status(Response.Status.CREATED).entity(service.create(dto)).build();
     }
 
     @PUT
     @Path("/{id}")
-    public Response update(@PathParam("id") Long id, InventoryDTO dto) {
-        InventoryDTO updated = service.update(id, dto);
-        return updated == null ? Response.status(Response.Status.NOT_FOUND).build() : Response.ok(updated).build();
+    public Response update(@PathParam("id") Long id, InventoryReqDTO dto) {
+        return Response.ok(service.update(id, dto)).build();
     }
 
     @DELETE

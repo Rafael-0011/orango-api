@@ -1,13 +1,13 @@
-package org.acme.dto;
+package org.acme.dto.req;
+
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
-public record InventoryDTO(
+public record InventoryReqDTO(
         Long id,
         Long productId,
         BigDecimal currentQuantity,
         BigDecimal currentAverageCost,
-        LocalDateTime updatedAt
+        BigDecimal inventoryMinimum
 ) {
 }
