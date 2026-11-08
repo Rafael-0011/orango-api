@@ -2,6 +2,7 @@ package org.acme.dto.res;
 
 import jakarta.validation.constraints.Positive;
 import org.acme.model.TransactionTypeEnum;
+import org.acme.model.UnitOfMeasureEnum;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -9,6 +10,8 @@ import java.time.LocalDateTime;
 public record InventoryTransactionResDTO(
         Long id,
         Long productId,
+        String name,
+        UnitOfMeasureEnum unitOfMeasure,
         TransactionTypeEnum transactionType,
         @Positive
         BigDecimal quantity,

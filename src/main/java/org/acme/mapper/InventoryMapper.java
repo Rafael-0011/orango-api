@@ -29,9 +29,13 @@ public class InventoryMapper {
     }
 
     public InventoryResDTO toDTO(InventoryModel model) {
+        assert model.product != null;
         return new InventoryResDTO(
                 model.id,
-                model.product == null ? null : model.product.id,
+                model.product.id,
+                model.product.name,
+                model.product.barcode,
+                model.product.unitOfMeasure,
                 model.currentQuantity,
                 model.currentAverageCost,
                 model.updatedAt,

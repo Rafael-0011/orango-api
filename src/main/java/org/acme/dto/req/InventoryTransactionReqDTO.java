@@ -11,6 +11,8 @@ public record InventoryTransactionReqDTO(
         BigDecimal quantity,
         @Positive
         BigDecimal unitValue,
-        String notes
+        String notes,
+        BigDecimal inventoryMinimum
+
 ) {
 }

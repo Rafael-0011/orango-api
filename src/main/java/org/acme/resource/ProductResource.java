@@ -1,18 +1,16 @@
 package org.acme.resource;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.validation.constraints.Max;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
+
+import org.acme.dto.PageResponse;
 import org.acme.dto.req.ProductReqDTO;
+import org.acme.dto.res.InventoryTransactionResDTO;
+import org.acme.dto.res.ProductResDTO;
 import org.acme.service.ProductService;
 
 @Path("/products")
@@ -26,6 +24,14 @@ public class ProductResource {
     @GET
     public Response findAll() {
         return Response.ok(service.findAll()).build();
+    }
+
+    @GET
+    @Path("/find-all-page")
+    public PageResponse<ProductResDTO> findAllPage(
+            @QueryParam("page") @DefaultValue("0") int page,
+            @QueryParam("size") @DefaultValue("20") @Max(100) int size) {
+        return service.findAllPage(page, size);
     }
 
     @GET

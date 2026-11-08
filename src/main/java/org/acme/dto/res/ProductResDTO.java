@@ -9,7 +9,6 @@ public record ProductResDTO(
         String name,
         String barcode,
         String description,
-        UnitOfMeasureEnum unitOfMeasure,
-        LocalDateTime createdAt
+        UnitOfMeasureEnum unitOfMeasure
 ) {
 }

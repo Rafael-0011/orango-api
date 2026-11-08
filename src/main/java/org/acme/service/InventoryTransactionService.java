@@ -84,6 +84,9 @@ public class InventoryTransactionService implements CrudService<InventoryTransac
         inventory.currentQuantity = inventory.currentQuantity.add(dto.quantity());
         inventory.currentAverageCost = newAvgCost;
         inventory.updatedAt = LocalDateTime.now();
+        if (dto.inventoryMinimum() != null){
+            inventory.inventoryMinimum = dto.inventoryMinimum();
+        }
 
         statusAttention(inventory);
 

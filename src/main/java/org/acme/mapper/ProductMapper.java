@@ -23,6 +23,11 @@ public class ProductMapper {
     }
 
     public ProductResDTO toDTO(ProductModel model) {
-        return new ProductResDTO(model.id, model.name, model.barcode, model.description,model.unitOfMeasure, model.createdAt);
+        return new ProductResDTO(
+                model.id,
+                model.name,
+                model.barcode,
+                model.description,
+                model.unitOfMeasure);
     }
 }
