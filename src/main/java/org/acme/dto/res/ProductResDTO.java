@@ -2,6 +2,7 @@ package org.acme.dto.res;
 
 import org.acme.model.UnitOfMeasureEnum;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record ProductResDTO(
@@ -9,6 +10,8 @@ public record ProductResDTO(
         String name,
         String barcode,
         String description,
-        UnitOfMeasureEnum unitOfMeasure
+        UnitOfMeasureEnum unitOfMeasure,
+        BigDecimal inventoryMinimum
+
 ) {
 }

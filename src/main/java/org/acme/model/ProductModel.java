@@ -32,6 +32,9 @@ public class ProductModel extends PanacheEntityBase {
     @Column(name = "created_at")
     public LocalDateTime createdAt;
 
+    @Column(name = "inventory_minimum")
+    public BigDecimal inventoryMinimum;
+
     public static ProductModel findProduct(Long productId) {
         if (productId == null) {
             throw new BadRequestException("productId é obrigatório");

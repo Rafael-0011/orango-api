@@ -2,6 +2,7 @@ package org.acme.dto.req;
 
 import org.acme.model.UnitOfMeasureEnum;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record ProductReqDTO(
@@ -10,6 +11,8 @@ public record ProductReqDTO(
         String barcode,
         String description,
         UnitOfMeasureEnum unitOfMeasure,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        BigDecimal inventoryMinimum
+
 ) {
 }

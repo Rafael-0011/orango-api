@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 public record InventoryTransactionReqDTO(
         Long id,
         Long productId,
-        @Positive
+        @Positive(message = "A quantidade deve ser maior do que zero")
         BigDecimal quantity,
-        @Positive
+        @Positive(message = "A Valor unitario deve ser maior do que zero")
         BigDecimal unitValue,
         String notes,
         BigDecimal inventoryMinimum

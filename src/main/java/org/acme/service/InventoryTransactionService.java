@@ -15,6 +15,8 @@ import java.util.Optional;
 
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.acme.dto.req.InventoryTransactionReqDTO;
 import org.acme.dto.PageResponse;
 import org.acme.dto.res.InventoryTransactionResDTO;
@@ -84,11 +86,8 @@ public class InventoryTransactionService implements CrudService<InventoryTransac
         inventory.currentQuantity = inventory.currentQuantity.add(dto.quantity());
         inventory.currentAverageCost = newAvgCost;
         inventory.updatedAt = LocalDateTime.now();
-        if (dto.inventoryMinimum() != null){
-            inventory.inventoryMinimum = dto.inventoryMinimum();
-        }
 
-        statusAttention(inventory);
+        statusAttention(inventory, product);
 
         return mapper.toDTO(model);
     }
@@ -101,23 +100,33 @@ public class InventoryTransactionService implements CrudService<InventoryTransac
         InventoryModel inventory = ProductModel.findOrCreateInventoryLocked(product);
 
         if (inventory.currentQuantity.compareTo(dto.quantity()) < 0) {
-            throw new WebApplicationException(
-                    "Estoque insuficiente. Disponível: " + inventory.currentQuantity, 422);
+            Response response = Response.status(422)
+                    .entity("Estoque insuficiente. Disponível: " + inventory.currentQuantity)
+                    .type(MediaType.TEXT_PLAIN)
+                    .build();
+
+            throw new WebApplicationException(response);
         }
+
         InventoryTransactionModel model = mapper.toModel(dto);
         model.product = product;
         model.transactionType = TransactionTypeEnum.OUTFLOW;
         model.cmv = calculateCmv(dto.quantity(), inventory.currentAverageCost);
+
         if (model.transactionDate == null) {
             model.transactionDate = LocalDateTime.now();
         }
         model.persist();
 
+        if (inventory.currentQuantity.compareTo(dto.quantity()) == 0) {
+            inventory.currentAverageCost = BigDecimal.ZERO;
+        }
+
         // saída altera só a quantidade; o custo médio permanece
         inventory.currentQuantity = inventory.currentQuantity.subtract(dto.quantity());
         inventory.updatedAt = LocalDateTime.now();
 
-        statusAttention(inventory);
+        statusAttention(inventory, product);
 
         return mapper.toDTO(model);
     }
@@ -162,8 +171,8 @@ public class InventoryTransactionService implements CrudService<InventoryTransac
         }
     }
 
-    private void statusAttention(InventoryModel inventory) {
-        if (inventory.inventoryMinimum.compareTo(inventory.currentQuantity) >= 0){
+    private void statusAttention(InventoryModel inventory, ProductModel productModel) {
+        if (productModel.inventoryMinimum.compareTo(inventory.currentQuantity) >= 0){
             inventory.status = StatusInventory.CRITICAL;
         }
         else {

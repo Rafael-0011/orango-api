@@ -23,9 +23,6 @@ public class InventoryMapper {
         model.currentQuantity = dto.currentQuantity();
         model.currentAverageCost = dto.currentAverageCost();
         model.updatedAt = LocalDateTime.now();
-        if (dto.inventoryMinimum() != null){
-           model.inventoryMinimum = dto.inventoryMinimum();
-        }
     }
 
     public InventoryResDTO toDTO(InventoryModel model) {

@@ -1,0 +1,96 @@
+<!-- Created with Jaspersoft Studio version 7.0.8.final using JasperReports Library version 7.0.8-6f896111  -->
+<jasperReport name="teste" language="java" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" uuid="e9bb1a27-f975-4aa4-98f9-75524c5daafa">
+	<style name="Title" fontName="SansSerif" fontSize="26.0" bold="true"/>
+	<style name="SubTitle" forecolor="#666666" fontName="SansSerif" fontSize="18.0"/>
+	<style name="Column header" forecolor="#FFFFFF" fontName="SansSerif" fontSize="12.0" bold="true"/>
+	<style name="Detail" fontName="SansSerif" fontSize="12.0"/>
+	<parameter name="TITULO" class="java.lang.String"/>
+	<parameter name="ORGANIZACAO" class="java.lang.String"/>
+	<query language="sql"><![CDATA[]]></query>
+	<field name="id" class="java.lang.Integer">
+		<property name="net.sf.jasperreports.javabean.field.property" value="id"/>
+	</field>
+	<field name="nome" class="java.lang.String">
+		<property name="net.sf.jasperreports.javabean.field.property" value="nome"/>
+	</field>
+	<field name="email" class="java.lang.String">
+		<property name="net.sf.jasperreports.javabean.field.property" value="email"/>
+	</field>
+	<field name="ativo" class="java.lang.Boolean">
+		<property name="net.sf.jasperreports.javabean.field.property" value="ativo"/>
+	</field>
+	<background height="822" splitType="Stretch">
+		<element kind="image" uuid="6be67a9c-1fb8-44ea-93c5-22c7de2c74ad" x="-20" y="313" width="105" height="409" mode="Transparent" positionType="Float" vImageAlign="Bottom">
+			<expression><![CDATA["waves.jpg"]]></expression>
+		</element>
+		<element kind="frame" uuid="58048a65-569d-454e-b6dd-f3bb46c94ee3" x="-20" y="722" width="105" height="100" forecolor="#666666" backcolor="#666666" mode="Opaque">
+			<box>
+				<pen lineWidth="0.0"/>
+				<topPen lineWidth="0.0"/>
+				<leftPen lineWidth="0.0"/>
+				<bottomPen lineWidth="0.0"/>
+				<rightPen lineWidth="0.0"/>
+			</box>
+			<element kind="textField" uuid="0f40ce36-78f2-49e5-adf5-8855d6516e74" x="0" y="0" width="104" height="73" forecolor="#000000" fontSize="58.0" bold="true" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle" style="Column header">
+				<expression><![CDATA[$V{PAGE_NUMBER}]]></expression>
+			</element>
+			<element kind="textField" uuid="e06a687c-0f3f-4451-a45e-f88c505ba589" x="0" y="77" width="104" height="20" forecolor="#000000" fontSize="16.0" evaluationTime="Report" bold="false" hTextAlign="Center" style="Column header">
+				<box leftPadding="4" rightPadding="4" style="Column header"/>
+				<expression><![CDATA[$V{PAGE_NUMBER}]]></expression>
+			</element>
+			<element kind="line" uuid="ab96a4b0-8a0d-4ae2-8695-16868926ec2b" x="42" y="73" width="20" height="1" mode="Transparent"/>
+		</element>
+	</background>
+	<title height="152" splitType="Stretch">
+		<element kind="staticText" uuid="524767a9-e7e5-4041-9b08-5a7210b38e22" x="0" y="0" width="555" height="115" fontName="SansSerif" fontSize="54.0" bold="false" hTextAlign="Right" vTextAlign="Middle" style="Title">
+			<text><![CDATA[$P{TITULO}]]></text>
+		</element>
+		<element kind="staticText" uuid="bd605e96-6228-492c-9dd6-f33258081a5a" x="234" y="115" width="321" height="37" fontName="SansSerif" fontSize="26.0" hTextAlign="Right" style="SubTitle">
+			<text><![CDATA[Waves SubTitle]]></text>
+		</element>
+	</title>
+	<pageHeader splitType="Stretch"/>
+	<columnHeader height="25" splitType="Stretch">
+		<element kind="staticText" uuid="b02d297c-b19d-466a-bdc5-0280fa367ca4" x="55" y="0" width="100" height="25" backcolor="#CC302D" mode="Opaque">
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2d76d280-9b7b-4acd-982f-e1f854119aec"/>
+			<text><![CDATA[id]]></text>
+		</element>
+		<element kind="staticText" uuid="c5b1cd37-0cc9-4e75-8be6-13e747318aea" x="160" y="0" width="100" height="25" backcolor="#CC302D" mode="Opaque">
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="aa50f128-6e6b-4215-8943-b12280fdd685"/>
+			<text><![CDATA[nome]]></text>
+		</element>
+		<element kind="staticText" uuid="d9937591-af83-49db-90f0-7a023e71ca56" x="270" y="0" width="100" height="25" backcolor="#CC302D" mode="Opaque">
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0087424d-d262-411b-bd32-2578e86a3c24"/>
+			<text><![CDATA[email]]></text>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<element kind="line" uuid="2b97af27-2a1e-491f-a0f4-b2549a3510ee" x="97" y="16" width="458" height="1" positionType="FixRelativeToBottom">
+				<pen lineWidth="0.5" lineColor="#999999"/>
+			</element>
+			<element kind="textField" uuid="37245b70-b1f5-4df5-ab24-973a5985a2fb" x="42" y="0" width="100" height="30">
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2d76d280-9b7b-4acd-982f-e1f854119aec"/>
+				<expression><![CDATA[$F{id}]]></expression>
+			</element>
+			<element kind="textField" uuid="2592a5a7-99cd-4b57-a3ae-2af58fa66c34" x="142" y="0" width="100" height="30">
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="aa50f128-6e6b-4215-8943-b12280fdd685"/>
+				<expression><![CDATA[$F{nome}]]></expression>
+			</element>
+			<element kind="textField" uuid="4f8301c5-7d44-4408-b480-935628215081" x="240" y="0" width="100" height="30">
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0087424d-d262-411b-bd32-2578e86a3c24"/>
+				<expression><![CDATA[$F{email}]]></expression>
+			</element>
+		</band>
+	</detail>
+	<columnFooter splitType="Stretch"/>
+	<pageFooter height="100" splitType="Stretch">
+		<element kind="textField" uuid="f8570c2f-4404-4725-885a-4eb3c26abb4a" x="424" y="0" width="131" height="20" forecolor="#000000" fontName="SansSerif" fontSize="12.0" pattern="EEEEE dd MMMMM yyyy" bold="false" hTextAlign="Right" style="Column header">
+			<expression><![CDATA[new java.util.Date()]]></expression>
+		</element>
+		<element kind="staticText" uuid="fce324aa-31f5-453a-a957-28bc6f740c75" x="96" y="0" width="267" height="20" forecolor="#000000" fontName="SansSerif" fontSize="12.0" bold="false" style="Column header">
+			<text><![CDATA[Waves Title Report]]></text>
+		</element>
+	</pageFooter>
+	<summary splitType="Stretch"/>
+</jasperReport>

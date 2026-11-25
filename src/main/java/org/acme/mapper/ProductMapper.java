@@ -19,6 +19,7 @@ public class ProductMapper {
         model.barcode = dto.barcode();
         model.description = dto.description();
         model.unitOfMeasure = dto.unitOfMeasure();
+        model.inventoryMinimum = dto.inventoryMinimum();
 
     }
 
@@ -28,6 +29,7 @@ public class ProductMapper {
                 model.name,
                 model.barcode,
                 model.description,
-                model.unitOfMeasure);
+                model.unitOfMeasure,
+                model.inventoryMinimum);
     }
 }

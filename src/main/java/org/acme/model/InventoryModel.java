@@ -30,7 +30,4 @@ public class InventoryModel extends PanacheEntityBase {
     @Enumerated(EnumType.ORDINAL)
     public StatusInventory status;
 
-    @Column(name = "inventory_minimum")
-    public BigDecimal inventoryMinimum;
-
 }
