@@ -62,4 +62,8 @@ public class ProductModel extends PanacheEntityBase {
         }
         return inventory;
     }
+
+    public static boolean existsByBarcode(String barcode) {
+        return count("barcode", barcode) > 0;
+    }
 }

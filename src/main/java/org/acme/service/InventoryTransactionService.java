@@ -100,12 +100,8 @@ public class InventoryTransactionService implements CrudService<InventoryTransac
         InventoryModel inventory = ProductModel.findOrCreateInventoryLocked(product);
 
         if (inventory.currentQuantity.compareTo(dto.quantity()) < 0) {
-            Response response = Response.status(422)
-                    .entity("Estoque insuficiente. Disponível: " + inventory.currentQuantity)
-                    .type(MediaType.TEXT_PLAIN)
-                    .build();
-
-            throw new WebApplicationException(response);
+           var r = ResponseService.responseStatus("Estoque insuficiente. Disponível:", 422);
+           throw new WebApplicationException(r);
         }
 
         InventoryTransactionModel model = mapper.toModel(dto);

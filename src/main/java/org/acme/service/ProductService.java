@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.ws.rs.WebApplicationException;
 import org.acme.dto.PageResponse;
 import org.acme.dto.req.ProductReqDTO;
 import org.acme.dto.res.InventoryTransactionResDTO;
@@ -22,6 +23,7 @@ public class ProductService implements CrudService<ProductReqDTO, ProductResDTO>
 
     @Inject
     ProductMapper mapper;
+
 
     @Override
     public List<ProductResDTO> findAll() {
@@ -53,6 +55,10 @@ public class ProductService implements CrudService<ProductReqDTO, ProductResDTO>
     @Override
     @Transactional
     public ProductResDTO create(ProductReqDTO dto) {
+        if (ProductModel.existsByBarcode(dto.barcode())){
+            throw new WebApplicationException(ResponseService.responseStatus("Codigo de barra ja existe", 400));
+        }
+
         ProductModel model = mapper.toModel(dto);
         model.persist();
         return mapper.toDTO(model);
